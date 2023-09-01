@@ -9,6 +9,9 @@
   // 현재 활성화된(눈 앞에 보고있는) 씬(scroll-section)
   let currentScene = 0;
 
+  // 새로운 scene이 시작된 순간: true
+  let enterNewScene = false;
+
   const sceneInfo = [
     {
       // 0
@@ -114,6 +117,7 @@
   }
 
   function scrollLoop() {
+    enterNewScene = false;
     prevScrollHeight = 0;
     for (let i = 0; i < currentScene; i++) {
       prevScrollHeight += sceneInfo[i].scrollHeight;
@@ -121,6 +125,7 @@
 
     // 스크롤을 내리는 상황: 스크롤높이 > 이전 스크롤높이의 합 + 현재씬의 스크롤높이
     if (yOffSet > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+      enterNewScene = true;
       currentScene++;
       document.body.setAttribute('id', `show-scene-${currentScene}`);
     }
@@ -129,12 +134,16 @@
     if (yOffSet < prevScrollHeight) {
       // Safari에서 스크롤 Top에서 Bounce 효과일때 yOffSet을 -로 취급한다
       // 이런 경우를 방지하기 위해서 안전장치로 early return처리
-      if (currentScene === 0) return;
+      enterNewScene = true;
+      if (currentScene === 0) return; // 브라우저 바운스 효과로 인해 마이너스가 되는 것을 방지
       currentScene--;
       document.body.setAttribute('id', `show-scene-${currentScene}`);
     }
 
-    playAnimation()
+    // 씬이 바뀔 때는 playAnimation이 동작 안하도록(음수값 회피)
+    if (enterNewScene) return;
+
+    playAnimation();
   }
 
   window.addEventListener('scroll', () => {
