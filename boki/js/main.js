@@ -27,8 +27,13 @@
       },
       values: {
         // [200, 900]이어도 잘 작동함, start/end: 스크롤에 따른 애니메이션의 타이밍
-        messageA_opacity: [0, 1, { start: 0.1, end: 0.2 }],
-        messageB_opacity: [0, 1, { start: 0.3, end: 0.4 }]
+        messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
+        messageA_opacity_out: [1, 0, { start: 0.25, end: 0.3 }],
+
+        messageA_translateY_in: [20, 0, { start: 0.1, end: 0.2}],
+        messageA_translateY_out: [0, -20, { start: 0.25, end: 0.3}],
+
+        messageB_opacity_in: [0, 1, { start: 0.3, end: 0.4 }],
       }
     },
     {
@@ -123,12 +128,28 @@
     const objs = sceneInfo[currentScene].objs;
     const values = sceneInfo[currentScene].values;
     const currentYOffset = yOffSet - prevScrollHeight;
+    const scrollHeight = sceneInfo[currentScene].scrollHeight;
+    const scrollRatio = currentYOffset / scrollHeight;
 
     switch (currentScene) {
       case 0:
         // console.log('0 play');
-        let messageA_opacity_in = calcValues(values.messageA_opacity, currentYOffset);
-        objs.messageA.style.opacity = messageA_opacity_in;
+        const messageA_opacity_in = calcValues(values.messageA_opacity_in, currentYOffset);
+        const messageA_opacity_out = calcValues(values.messageA_opacity_out, currentYOffset);
+
+        const messageA_translateY_in = calcValues(values.messageA_translateY_in, currentYOffset);
+        const messageA_translateY_out = calcValues(values.messageA_translateY_out, currentYOffset);
+
+        if (scrollRatio <= 0.22) { // in
+          objs.messageA.style.opacity = messageA_opacity_in;
+          objs.messageA.style.transform = `translateY(${messageA_translateY_in}%)`;
+        }
+        else { // out
+          objs.messageA.style.opacity = messageA_opacity_out;
+          objs.messageA.style.transform = `translateY(${messageA_translateY_out}%)`;
+        }
+
+        console.info('messageA_opacity_in', messageA_opacity_in)
         break;
       case 1:
         // console.log('1 play');
