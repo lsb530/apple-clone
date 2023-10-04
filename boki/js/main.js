@@ -206,6 +206,10 @@
 
     switch (currentScene) {
       case 0:
+        let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));
+        // console.info('sequence', sequence);
+          objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+
         if (scrollRatio <= 0.22) { // in
           objs.messageA.style.opacity = calcValues(values.messageA_opacity_in, currentYOffset);
           objs.messageA.style.transform = `translate3d(0, ${calcValues(values.messageA_translateY_in, currentYOffset)}%, 0)`;
