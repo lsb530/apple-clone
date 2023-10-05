@@ -65,7 +65,6 @@ a {
   margin-left: 2em;
 }
 .scroll-section {
-  border: solid 1px red;
   padding-top: 50vh;
 }
 #scroll-section-0 h1 {
@@ -165,7 +164,13 @@ a {
 
 .sticky-elem-canvas {
   top: 0;
-  background: #ccc;
+  height: 100%;
+}
+
+.sticky-elem-canvas canvas{
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
 @media (min-width: 1024px) {
