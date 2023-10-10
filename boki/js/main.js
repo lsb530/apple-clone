@@ -133,6 +133,7 @@
         rect1X: [0, 0, { start: 0, end: 0 }],
         rect2X: [0, 0, { start: 0, end: 0 }],
         blendHeight: [0, 0, { start: 0, end: 0 }],
+        canvas_scale: [0, 0, { start: 0, end: 0 }],
         rectStartY: 0
       },
     },
@@ -439,7 +440,8 @@
         if (scrollRatio < values.rect1X[2].end) { // 캔버스가 브라우저 상단에 닿지 않았다면
           step = 1;
           objs.canvas.classList.remove('sticky');
-        } else { // 캔버스가 브라우저 상단에 닿았을 때
+        }
+        else { // 캔버스가 브라우저 상단에 닿았을 때
           step = 2;
           // 이미지 블렌드
           // blendHeight: [0, 0, { start: 0, end: 0 }],
@@ -456,6 +458,16 @@
 
           objs.canvas.classList.add('sticky');
           objs.canvas.style.top = `${-(objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2}px`;
+
+          if (scrollRatio > values.blendHeight[2].end) {
+            values.canvas_scale[0] = canvasScaleRatio;
+            values.canvas_scale[1] = document.body.offsetWidth / (1.5 * objs.canvas.width);
+            values.canvas_scale[2].start = values.blendHeight[2].end;
+            values.canvas_scale[2].end = values.canvas_scale[2].start + 0.2;
+
+            objs.canvas.style.transform =
+              `scale(${calcValues(values.canvas_scale, currentYOffset)}`;
+          }
         }
 
         break;
