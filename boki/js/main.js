@@ -132,6 +132,7 @@
       values: {
         rect1X: [0, 0, { start: 0, end: 0 }],
         rect2X: [0, 0, { start: 0, end: 0 }],
+        imageBlendY: [0, 0, { start: 0, end: 0 }],
         rectStartY: 0
       },
     },
@@ -440,6 +441,10 @@
           objs.canvas.classList.remove('sticky');
         } else { // 캔버스가 브라우저 상단에 닿았을 때
           step = 2;
+          // 이미지 블렌드
+          // imageBlendY: [0, 0, { start: 0, end: 0 }],
+          objs.context.drawImage(objs.images[1], 0, 200);
+
           objs.canvas.classList.add('sticky');
           objs.canvas.style.top = `${-(objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2}px`;
         }
