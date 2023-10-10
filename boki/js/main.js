@@ -374,6 +374,9 @@
 
         break;
       case 3:
+        /* 단계 처리 */
+        let step = 3;
+
         /* 가로/세로 모두 꽉 차게 하기 위해 여기서 세팅(계산 필요) */
         const widthRatio = window.innerWidth / objs.canvas.width;
         const heightRatio = window.innerHeight / objs.canvas.height;
@@ -431,6 +434,15 @@
           parseInt(calcValues(values.rect2X, currentYOffset)), 0,
           parseInt(whiteRectWidth), objs.canvas.height
         );
+
+        if (scrollRatio < values.rect1X[2].end) { // 캔버스가 브라우저 상단에 닿지 않았다면
+          step = 1;
+          objs.canvas.classList.remove('sticky');
+        } else { // 캔버스가 브라우저 상단에 닿았을 때
+          step = 2;
+          objs.canvas.classList.add('sticky');
+          objs.canvas.style.top = `${-(objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2}px`;
+        }
 
         break;
     }
